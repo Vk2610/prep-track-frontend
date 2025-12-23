@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+
+  --color-brand-purple: #a855f7;
+  --color-brand-pink: #ec4899;
+  --color-brand-blue: #3b82f6;
+  --color-brand-cyan: #06b6d4;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-reveal: reveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  --animate-scale-in: scaleIn 0.4s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  --animate-shake: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+  --animate-toast-progress: toastProgress 5s linear forwards;
+
+  --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.37);
+  --shadow-glow: 0 0 25px rgba(168, 85, 247, 0.6);
+  --shadow-auth-glow: 0 0 20px rgba(168, 85, 247, 0.4);
+  --shadow-auth-hover: 0 0 30px rgba(168, 85, 247, 0.6);
+
+  --backdrop-blur-xl: 20px;
+
+  @keyframes toastProgress {
+    from {
+      width: 100%;
+    }
+
+    to {
+      width: 0%;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shake {
+
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+}
+
+/* ===================================
+   GLOBAL BASE
+   =================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[#0b0616] text-white antialiased selection:bg-purple-500/30 selection:text-white;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#0b0616];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+}
+
+/* ===================================
+   PREMIUM UTILITIES
+   =================================== */
+
+@utility glass-card {
+  @apply relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 sm:p-8 transition-all duration-500;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+
+  &:hover {
+    @apply border-white/20 bg-white/10 -translate-y-1;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}
+
+@utility glass-panel {
+  @apply rounded-[2.5rem] border border-white/10 bg-black/40 backdrop-blur-2xl p-8 sm:p-12;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.5);
+}
+
+@utility dark-glass-card {
+  @apply rounded-2xl border border-white/5 bg-black/40 p-5 transition-all duration-300;
+
+  &:hover {
+    @apply border-white/10 bg-black/60 translate-x-1;
+  }
+}
+
+@utility input-premium {
+  @apply w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none transition-all duration-300 placeholder:text-white/20 focus:border-purple-500/50 focus:bg-white/10 focus:ring-4 focus:ring-purple-500/10;
+}
+
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 font-bold text-black transition-all duration-300 active:scale-95 disabled:opacity-50;
+
+  &:hover {
+    @apply -translate-y-1;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@utility btn-glass {
+  @apply inline-flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md px-8 py-4 font-bold text-white transition-all duration-300 active:scale-95;
+
+  &:hover {
+    @apply border-white/20 bg-white/10 -translate-y-1;
+  }
+}
+
+@utility glass-badge {
+  @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/60;
+}
+
+/* Gradient Utilities */
+@utility text-gradient-purple {
+  @apply bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent underline-offset-4 font-display;
+}
+
+@utility text-gradient-blue {
+  @apply bg-linear-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent underline-offset-4 font-display;
+}
+
+@utility gradient-mesh-bg {
+  background: radial-gradient(circle at 0% 0%, #1a0b2e 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, #0d1e3d 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, #1a0b2e 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, #0d1e3d 0%, transparent 50%),
+    #0b0616;
+  min-height: 100vh;
+}
+
+/* Layout Utilities */
+@utility page-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 flex flex-col gap-10 sm:gap-16;
+}
+
+@utility section-header {
+  @apply flex flex-col gap-4 text-center max-w-3xl mx-auto mb-12;
+}
+
+/* Helper Utilities */
+@utility hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+@utility hover-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20;
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ===================================
+   LEGACY COMPATIBILITY
+   =================================== */
+.spinner {
+  @apply h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white;
+}
+
+.spinner-lg {
+  @apply h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-purple-500;
+}
+
+.reveal {
+  @apply animate-reveal;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.animate-scaleIn {
+  @apply animate-scale-in;
+}
+
+.animate-shake {
+  @apply animate-shake;
+}
+
+.floating-orbs {
+  @apply absolute inset-0 overflow-hidden pointer-events-none;
+}
+
+.orb {
+  @apply absolute rounded-full blur-[100px] opacity-20 animate-pulse;
+}
+
+/* ===================================
+   AUTH REDESIGN UTILITIES
+   =================================== */
+@utility glass-auth {
+  @apply rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-3xl p-10 shadow-auth-glow;
+}
+
+@utility input-auth {
+  @apply w-full rounded-full border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all duration-300 placeholder:text-white/30 focus:border-purple-500/50 focus:bg-white/10 focus:ring-4 focus:ring-purple-500/10;
+}
+
+@utility btn-auth-primary {
+  @apply w-full rounded-full bg-linear-to-r from-purple-500/80 to-indigo-600/80 p-4 font-bold text-white transition-all duration-300 active:scale-95 shadow-auth-glow relative overflow-hidden flex items-center justify-center;
+
+  &::before {
+    content: '';
+    @apply absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300;
+  }
+
+  &:hover {
+    @apply -translate-y-0.5 shadow-auth-hover;
+
+    &::before {
+      @apply opacity-100;
+    }
+  }
+}
+
+@utility bg-mesh-auth {
+  background:
+    radial-gradient(circle at 0% 0%, #1a0b2e 0%, transparent 60%),
+    radial-gradient(circle at 100% 0%, #0d1e3d 0%, transparent 60%),
+    radial-gradient(circle at 10% 90%, #2a0b4e 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, #0d2e5d 0%, transparent 50%),
+    #07040d;
+  min-height: 100vh;
+}
+
+
+.active-glow {
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+}
+
+/* Shared menu item styling */
+.menu-item {
+  @apply flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-white/70 hover:text-white hover:bg-white/10 transition-all cursor-pointer;
+}
+
+/* Menu item icon consistency */
+.menu-item svg {
+  @apply w-4 h-4 shrink-0;
+}
