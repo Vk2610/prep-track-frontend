@@ -42,7 +42,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0b0616] via-[#120a25] to-[#0b0616]">
+        <div className="min-h-screen bg-linear-to-br from-[#0b0616] via-[#120a25] to-[#0b0616]">
             <main className="px-4 py-6 sm:py-16 flex justify-center">
                 <div className="w-full max-w-xl">
 
@@ -57,7 +57,7 @@ const Profile = () => {
                             {/* Header */}
                             <div className="flex flex-col items-center text-center gap-4">
                                 <div className="relative">
-                                    <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-white/15 flex items-center justify-center shadow-xl">
+                                    <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-3xl bg-linear-to-br from-purple-500/30 to-pink-500/30 border border-white/15 flex items-center justify-center shadow-xl">
                                         <User className="w-10 h-10 sm:w-14 sm:h-14 text-white" />
                                     </div>
                                     <span className="absolute -bottom-1 -right-1 w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 border-2 border-[#0b0616] flex items-center justify-center">
@@ -142,7 +142,7 @@ const Profile = () => {
                                             <button
                                                 type="submit"
                                                 disabled={loading}
-                                                className="flex-1 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-500 py-4 font-black text-white flex items-center justify-center gap-2 transition"
+                                                className="flex-1 rounded-2xl bg-linear-to-r from-purple-600 to-pink-500 py-4 font-black text-white flex items-center justify-center gap-2 transition"
                                             >
                                                 {loading ? (
                                                     <Loader2 className="w-5 h-5 animate-spin" />

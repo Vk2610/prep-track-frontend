@@ -104,7 +104,7 @@ const Navbar = () => {
                                     {active && (
                                         <motion.div
                                             layoutId="activeTab"
-                                            className="absolute inset-0 bg-white rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.6)]"
+                                            className="absolute inset-0 bg-white rounded-xl shadow-glow"
                                             transition={{ type: 'spring', bounce: 0.25, duration: 0.6 }}
                                         />
                                     )}
@@ -204,7 +204,7 @@ const Navbar = () => {
                                         to={to}
                                         onClick={() => setMenuOpen(false)}
                                         className={`flex items-center gap-4 p-4 rounded-2xl font-bold transition ${isActive(to)
-                                            ? 'bg-white text-black shadow-[0_0_25px_rgba(168,85,247,0.6)]'
+                                            ? 'bg-white text-black shadow-glow'
                                             : 'text-white/50 bg-white/5 hover:text-white'
                                             }`}
                                     >

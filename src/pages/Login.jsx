@@ -65,6 +65,7 @@ export default function Login({ isNested = false }) {
                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-start gap-3 animate-shake">
                     <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                     <p className="text-red-200 text-xs font-medium leading-relaxed">{error}</p>
+                    {console.log(error)}
                 </div>
             )}
 
