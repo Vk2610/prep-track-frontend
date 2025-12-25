@@ -15,7 +15,8 @@ import {
     Activity,
     Target,
     Flame,
-    ChevronDown
+    ChevronDown,
+    X
 } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
@@ -43,6 +44,7 @@ const DailyTracker = () => {
     const [submitting, setSubmitting] = useState(false);
     const [isMoodOpen, setIsMoodOpen] = useState(false);
     const [deleteDialog, setDeleteDialog] = useState({ isOpen: false, date: null });
+    const [viewingDetails, setViewingDetails] = useState(null);
 
     const toast = useToast();
 
@@ -124,11 +126,11 @@ const DailyTracker = () => {
             .length;
 
     const moodIcons = {
-        excellent: { icon: Smile, color: 'emerald' },
-        good: { icon: Smile, color: 'blue' },
-        okay: { icon: Meh, color: 'yellow' },
-        bad: { icon: Frown, color: 'orange' },
-        terrible: { icon: Frown, color: 'red' },
+        excellent: { icon: Smile, color: 'emerald', label: 'Excellent' },
+        good: { icon: Smile, color: 'blue', label: 'Good' },
+        okay: { icon: Meh, color: 'yellow', label: 'Okay' },
+        bad: { icon: Frown, color: 'orange', label: 'Bad' },
+        terrible: { icon: Frown, color: 'red', label: 'Terrible' },
     };
 
     return (
@@ -152,7 +154,7 @@ const DailyTracker = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 reveal animate-delay-100 items-start">
 
                     {/* TRACKING MODULE */}
-                    <div className="lg:col-span-12 xl:col-span-7">
+                    <div className={`lg:col-span-12 xl:col-span-7 transition-all duration-300 ${isMoodOpen ? 'relative z-20' : 'relative z-10'}`}>
                         <div className="glass-panel p-6 sm:p-10! relative overflow-visible! group">
                             {/* Accent Glow */}
                             <div className="absolute -top-24 -left-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all duration-700"></div>
@@ -266,7 +268,7 @@ const DailyTracker = () => {
                                             </button>
 
                                             {isMoodOpen && (
-                                                <div className="absolute top-full left-0 right-0 mt-3 bg-[#1a1a2e] border border-white/20 rounded-4xl p-3 z-100 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-3xl overflow-hidden reveal">
+                                                <div className="absolute top-full left-0 right-0 mt-3 bg-[#1a1a2e] border border-white/20 rounded-4xl p-3 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-3xl overflow-hidden reveal">
                                                     {[
                                                         { val: 'excellent', lbl: '😄 Excellent' },
                                                         { val: 'good', lbl: '🙂 Good' },
@@ -340,7 +342,8 @@ const DailyTracker = () => {
                                         return (
                                             <div
                                                 key={entry._id}
-                                                className="glass-card p-5! group hover:bg-white/10! transition-all relative overflow-hidden"
+                                                onClick={() => setViewingDetails(entry)}
+                                                className="glass-card p-5! group hover:bg-white/10! transition-all relative overflow-hidden cursor-pointer active:scale-[0.98]"
                                                 style={{ animationDelay: `${idx * 50}ms` }}
                                             >
                                                 {/* Progress indicator gradient line */}
@@ -370,8 +373,11 @@ const DailyTracker = () => {
                                                     </div>
 
                                                     <button
-                                                        onClick={() => setDeleteDialog({ isOpen: true, date: entry.date })}
-                                                        className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500/20 active:scale-95"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setDeleteDialog({ isOpen: true, date: entry.date });
+                                                        }}
+                                                        className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 md:opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500/20 active:scale-95"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>
@@ -385,6 +391,86 @@ const DailyTracker = () => {
                     </div>
                 </div>
             </main>
+
+            {/* DETAILS MODAL */}
+            {viewingDetails && (
+                <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6">
+                    <div
+                        className="absolute inset-0 bg-black/80 backdrop-blur-md animate-fade-in"
+                        onClick={() => setViewingDetails(null)}
+                    ></div>
+                    <div className="relative w-full max-w-lg glass-panel p-8 sm:p-10! reveal overflow-hidden">
+                        <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 className="text-2xl font-black text-white">Daily Summary</h3>
+                                <p className="text-white/30 text-xs font-bold uppercase tracking-widest mt-1">
+                                    {new Date(viewingDetails.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setViewingDetails(null)}
+                                className="relative z-10 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Mood Section */}
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div className={`w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center ${moodIcons[viewingDetails.mood] ? `text-${moodIcons[viewingDetails.mood].color}-400` : 'text-white/20'}`}>
+                                    {(() => {
+                                        const MoodIcon = moodIcons[viewingDetails.mood]?.icon || Meh;
+                                        return <MoodIcon className="w-6 h-6" />;
+                                    })()}
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Feeling</p>
+                                    <p className="text-white font-bold capitalize">{viewingDetails.mood || 'Not recorded'}</p>
+                                </div>
+                            </div>
+
+                            {/* Tasks Grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {[
+                                    { f: 'quant', l: 'Quantitative Ability', icon: Brain, color: 'purple' },
+                                    { f: 'lrdi', l: 'LR & Data Interpretation', icon: Zap, color: 'blue' },
+                                    { f: 'varc', l: 'Verbal Ability & RC', icon: Activity, color: 'emerald' },
+                                    { f: 'softSkill', l: 'Soft Skills Training', icon: Heart, color: 'pink' },
+                                    { f: 'exercise', l: 'Physical Exercise', icon: Dumbbell, color: 'orange' },
+                                    { f: 'gaming', l: 'Gaming & Recreation', icon: Gamepad2, color: 'cyan' },
+                                ].map(({ f, l, icon: Icon, color }) => (
+                                    <div
+                                        key={f}
+                                        className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${viewingDetails[f]
+                                            ? `bg-${color}-500/10 border-${color}-500/20 text-${color}-400`
+                                            : 'bg-white/5 border-white/5 text-white/20'
+                                            }`}
+                                    >
+                                        <Icon className="w-4 h-4 shrink-0" />
+                                        <span className="text-[10px] font-black uppercase tracking-tight leading-none">{l}</span>
+                                        {viewingDetails[f] && <CheckCircle2 className="w-3.5 h-3.5 ml-auto" />}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="pt-4">
+                                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-linear-to-r from-purple-500 to-pink-500 transition-all duration-1000"
+                                        style={{ width: `${(completionCount(viewingDetails) / 6) * 100}%` }}
+                                    ></div>
+                                </div>
+                                <p className="text-center text-[10px] font-black text-white/20 uppercase tracking-widest mt-3">
+                                    Daily Goal: {completionCount(viewingDetails)} / 6 COMPLETED
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <ConfirmDialog
                 isOpen={deleteDialog.isOpen}
