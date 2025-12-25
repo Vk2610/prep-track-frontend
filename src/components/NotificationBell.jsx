@@ -88,61 +88,69 @@ const NotificationBell = () => {
 
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                        className="absolute right-0 mt-3 w-[320px] sm:w-[380px] bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50"
-                    >
-                        <div className="p-4 border-b border-white/5 flex items-center justify-between bg-white/2">
-                            <h3 className="text-sm font-black text-white uppercase tracking-widest">Notifications</h3>
-                            {unreadCount > 0 && (
-                                <button
-                                    onClick={handleReadAll}
-                                    className="text-[10px] font-black text-purple-400 hover:text-purple-300 uppercase underline decoration-2 underline-offset-4"
-                                >
-                                    Mark all as read
-                                </button>
-                            )}
-                        </div>
+                    <>
+                        {/* Mobile Backdrop */}
+                        <div
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 sm:hidden"
+                            onClick={() => setIsOpen(false)}
+                        />
 
-                        <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
-                            {notifications.length > 0 ? (
-                                notifications.map((n) => (
-                                    <div
-                                        key={n._id}
-                                        onClick={() => !n.isRead && handleMarkAsRead(n._id)}
-                                        className={`p-4 border-b border-white/5 cursor-pointer transition-colors active:bg-white/5 ${n.isRead ? 'opacity-50' : 'bg-white/2 hover:bg-white/5'}`}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            className="fixed sm:absolute inset-x-4 sm:inset-auto sm:right-0 top-20 sm:top-full sm:mt-3 w-auto sm:w-[380px] max-w-[450px] mx-auto sm:mx-0 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50"
+                        >
+                            <div className="p-4 border-b border-white/5 flex items-center justify-between bg-white/2">
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest">Notifications</h3>
+                                {unreadCount > 0 && (
+                                    <button
+                                        onClick={handleReadAll}
+                                        className="text-[10px] font-black text-purple-400 hover:text-purple-300 uppercase underline decoration-2 underline-offset-4"
                                     >
-                                        <div className="flex gap-4">
-                                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                                {getTypeIcon(n.type)}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-xs font-bold text-white mb-0.5">{n.title}</p>
-                                                <p className="text-[11px] text-white/40 leading-relaxed mb-1.5">{n.message}</p>
-                                                <p className="text-[9px] font-medium text-white/20 uppercase tracking-widest">
-                                                    {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </p>
-                                            </div>
-                                            {!n.isRead && (
-                                                <div className="w-2 h-2 rounded-full bg-purple-500 mt-1" />
-                                            )}
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="p-12 flex flex-col items-center justify-center text-center opacity-30">
-                                    <Bell className="w-8 h-8 mb-4" />
-                                    <p className="text-xs font-bold">No notifications yet</p>
-                                </div>
-                            )}
-                        </div>
+                                        Mark all as read
+                                    </button>
+                                )}
+                            </div>
 
-                        <div className="p-3 bg-white/2 border-t border-white/5 text-center">
-                            <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Stay on track with your goals</p>
-                        </div>
-                    </motion.div>
+                            <div className="max-h-[400px] sm:max-h-[450px] overflow-y-auto custom-scrollbar">
+                                {notifications.length > 0 ? (
+                                    notifications.map((n) => (
+                                        <div
+                                            key={n._id}
+                                            onClick={() => !n.isRead && handleMarkAsRead(n._id)}
+                                            className={`p-4 border-b border-white/5 cursor-pointer transition-colors active:bg-white/5 ${n.isRead ? 'opacity-50' : 'bg-white/2 hover:bg-white/5'}`}
+                                        >
+                                            <div className="flex gap-4">
+                                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                                    {getTypeIcon(n.type)}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs font-bold text-white mb-0.5">{n.title}</p>
+                                                    <p className="text-[11px] text-white/40 leading-relaxed mb-1.5">{n.message}</p>
+                                                    <p className="text-[9px] font-medium text-white/20 uppercase tracking-widest">
+                                                        {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </p>
+                                                </div>
+                                                {!n.isRead && (
+                                                    <div className="w-2 h-2 rounded-full bg-purple-500 mt-1" />
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="p-12 flex flex-col items-center justify-center text-center opacity-30">
+                                        <Bell className="w-8 h-8 mb-4" />
+                                        <p className="text-xs font-bold">No notifications yet</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="p-3 bg-white/2 border-t border-white/5 text-center">
+                                <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Stay on track with your goals</p>
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
         </div>
