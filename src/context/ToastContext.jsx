@@ -75,7 +75,7 @@ export const ToastProvider = ({ children }) => {
             {children}
 
             {/* TOAST CONTAINER */}
-            <div className="fixed top-24 right-6 z-[100] space-y-4 max-w-sm w-full pointer-events-none">
+            <div className="fixed top-24 right-6 z-100 space-y-4 max-w-sm w-full pointer-events-none">
                 {toasts.map((toast, index) => {
                     const config = getToastConfig(toast.type);
                     const Icon = config.icon;

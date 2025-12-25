@@ -189,61 +189,63 @@ const Navbar = () => {
                             className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#07040d]/90 backdrop-blur-3xl z-50 border-l border-white/10 flex flex-col"
                         >
                             {/* HEADER */}
-                            <div className="flex items-center justify-between p-6 border-b border-white/5">
-                                <span className="text-lg font-black text-white">Menu</span>
+                            <div className="flex items-center justify-between p-4 border-b border-white/5 shrink-0">
+                                <span className="text-base font-black text-white">Menu</span>
                                 <button onClick={() => setMenuOpen(false)}>
-                                    <X className="w-6 h-6 text-white" />
+                                    <X className="w-5 h-5 text-white" />
                                 </button>
                             </div>
 
                             {/* NAV LINKS */}
-                            <div className="flex-1 p-6 space-y-3">
+                            <div className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
                                 {navLinks.map(({ to, label, icon: Icon }) => (
                                     <Link
                                         key={to}
                                         to={to}
                                         onClick={() => setMenuOpen(false)}
-                                        className={`flex items-center gap-4 p-4 rounded-2xl font-bold transition ${isActive(to)
+                                        className={`flex items-center gap-3 p-3 rounded-xl font-bold transition text-sm ${isActive(to)
                                             ? 'bg-white text-black shadow-glow'
                                             : 'text-white/50 bg-white/5 hover:text-white'
                                             }`}
                                     >
-                                        <Icon className="w-5 h-5" />
+                                        <Icon className="w-4 h-4" />
                                         {label}
                                     </Link>
                                 ))}
                             </div>
 
                             {/* MOBILE PROFILE */}
-                            <div className="p-6 border-t border-white/5 space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="relative w-12 h-12 rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                                        <span className="text-lg font-black text-white">
+                            <div className="p-4 border-t border-white/5 space-y-3">
+                                <div className="flex items-center gap-3">
+                                    <div className="relative w-10 h-10 rounded-xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                        <span className="text-base font-black text-white">
                                             {user?.name?.charAt(0).toUpperCase()}
                                         </span>
-                                        <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-green-400 border-2 border-[#07040d]" />
+                                        <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-green-400 border-2 border-[#07040d]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-black text-white truncate">{user?.name}</p>
-                                        <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest truncate">
+                                        <p className="text-xs font-black text-white truncate">{user?.name}</p>
+                                        <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest truncate">
                                             {user?.email}
                                         </p>
                                     </div>
                                 </div>
 
-                                <Link to="/profile" onClick={() => setMenuOpen(false)} className="menu-item">
-                                    <UserCircle2 className="w-4 h-4" /> Profile
-                                </Link>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link to="/profile" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 p-2.5 rounded-xl text-[10px] font-bold text-white/70 hover:text-white bg-white/5 border border-white/10">
+                                        <UserCircle2 className="w-3.5 h-3.5" /> Profile
+                                    </Link>
 
-                                <Link to="/settings" onClick={() => setMenuOpen(false)} className="menu-item">
-                                    <Settings className="w-4 h-4" /> Settings
-                                </Link>
+                                    <Link to="/settings" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 p-2.5 rounded-xl text-[10px] font-bold text-white/70 hover:text-white bg-white/5 border border-white/10">
+                                        <Settings className="w-3.5 h-3.5" /> Settings
+                                    </Link>
+                                </div>
 
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 font-black hover:bg-red-500/20 transition"
+                                    className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-black hover:bg-red-500/20 transition"
                                 >
-                                    <LogOut className="w-4 h-4" />
+                                    <LogOut className="w-3.5 h-3.5" />
                                     Sign Out
                                 </button>
                             </div>
