@@ -40,9 +40,10 @@ const AiMentor = () => {
             }
         } catch (error) {
             console.error('AI Error:', error);
+            const errorMsg = error.response?.data?.message || "I'm sorry, I'm having trouble connecting right now. Please try again later.";
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: "I'm sorry, I'm having trouble connecting right now. Please try again later."
+                content: errorMsg
             }]);
         } finally {
             setIsLoading(false);
@@ -78,14 +79,14 @@ const AiMentor = () => {
                         >
                             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                                 <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${msg.role === 'user'
-                                        ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/20'
-                                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'
+                                    ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/20'
+                                    : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'
                                     }`}>
                                     {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
                                 </div>
                                 <div className={`p-4 rounded-3xl text-gray-200 leading-relaxed shadow-sm ${msg.role === 'user'
-                                        ? 'bg-indigo-500/10 rounded-tr-none'
-                                        : 'bg-white/5 rounded-tl-none'
+                                    ? 'bg-indigo-500/10 rounded-tr-none'
+                                    : 'bg-white/5 rounded-tl-none'
                                     }`}>
                                     <div className="whitespace-pre-wrap">{msg.content}</div>
                                 </div>

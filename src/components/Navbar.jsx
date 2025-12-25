@@ -17,6 +17,7 @@ import {
     Zap,
     Users
 } from 'lucide-react';
+import NotificationBell from './NotificationBell';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -117,6 +118,8 @@ const Navbar = () => {
 
                     {/* RIGHT ACTIONS */}
                     <div className="flex items-center gap-3">
+                        {/* NOTIFICATIONS */}
+                        <NotificationBell />
 
                         {/* DESKTOP USER MENU */}
                         <div className="hidden md:block relative">

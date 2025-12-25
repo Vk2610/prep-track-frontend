@@ -46,6 +46,7 @@ export const authAPI = {
     getProfile: () => apiClient.get('/auth/profile'),
     updateProfile: (data) => apiClient.put('/auth/profile', data),
     updatePassword: (data) => apiClient.put('/auth/password', data),
+    updateSettings: (data) => apiClient.put('/auth/settings', data),
     logout: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -99,6 +100,13 @@ export const insightsAPI = {
 // AI API calls
 export const aiAPI = {
     chat: (data) => apiClient.post('/ai/chat', data),
+};
+
+// Notification API calls
+export const notificationAPI = {
+    getAll: () => apiClient.get('/notifications'),
+    markAsRead: (id) => apiClient.patch(`/notifications/${id}/read`),
+    readAll: () => apiClient.patch('/notifications/read-all'),
 };
 
 export default apiClient;

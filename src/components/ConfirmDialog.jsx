@@ -5,7 +5,7 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
     if (!isOpen) return null;
 
     return createPortal(
-        <div className="fixed inset-0 z-[1100] flex items-center justify-center p-6 animate-reveal">
+        <div className="fixed inset-0 z-1100 flex items-center justify-center p-6 animate-reveal">
             {/* BACKDROP */}
             <div
                 className="absolute inset-0 bg-black/85 backdrop-blur-xl transition-all duration-500"
