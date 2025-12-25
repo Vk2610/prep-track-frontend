@@ -1,13 +1,14 @@
+import { createPortal } from 'react-dom';
 import { AlertTriangle, X } from 'lucide-react';
 
 const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Erase', confirmColor = 'red' }) => {
     if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-reveal">
+    return createPortal(
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center p-6 animate-reveal">
             {/* BACKDROP */}
             <div
-                className="absolute inset-0 bg-black/80 backdrop-blur-xl transition-all duration-500"
+                className="absolute inset-0 bg-black/85 backdrop-blur-xl transition-all duration-500"
                 onClick={onClose}
             ></div>
 
@@ -60,7 +61,8 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

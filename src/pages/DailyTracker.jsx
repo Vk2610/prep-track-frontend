@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
     Calendar,
     CheckCircle2,
@@ -55,6 +56,19 @@ const DailyTracker = () => {
     useEffect(() => {
         fetchEntryByDate(selectedDate);
     }, [selectedDate]);
+
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        const root = document.documentElement;
+        if (viewingDetails || deleteDialog.isOpen) {
+            root.classList.add('no-scroll');
+        } else {
+            root.classList.remove('no-scroll');
+        }
+        return () => {
+            root.classList.remove('no-scroll');
+        };
+    }, [viewingDetails, deleteDialog.isOpen]);
 
     const fetchEntries = async () => {
         setLoading(true);
@@ -268,7 +282,7 @@ const DailyTracker = () => {
                                             </button>
 
                                             {isMoodOpen && (
-                                                <div className="absolute top-full left-0 right-0 mt-3 bg-[#1a1a2e] border border-white/20 rounded-4xl p-3 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-3xl overflow-hidden reveal">
+                                                <div className="absolute top-full left-0 right-0 mt-3 bg-[#1a1a2e] border border-white/20 rounded-4xl p-3 z-100 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-3xl overflow-hidden reveal">
                                                     {[
                                                         { val: 'excellent', lbl: '😄 Excellent' },
                                                         { val: 'good', lbl: '🙂 Good' },
@@ -391,85 +405,85 @@ const DailyTracker = () => {
                     </div>
                 </div>
             </main>
-
-            {/* DETAILS MODAL */}
-            {viewingDetails && (
-                <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6">
+            {/* DETAILS MODAL - Using Portal for perfect centering */}
+            {viewingDetails && createPortal(
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
                     <div
-                        className="absolute inset-0 bg-black/80 backdrop-blur-md animate-fade-in"
+                        className="absolute inset-0 bg-black/85 backdrop-blur-md animate-fade-in"
                         onClick={() => setViewingDetails(null)}
                     ></div>
-                    <div className="relative w-full max-w-lg glass-panel p-8 sm:p-10! reveal overflow-hidden">
+                    <div className="relative w-full max-w-sm sm:max-w-md glass-panel p-7! sm:p-12! reveal overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)]">
                         <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                        <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center justify-between mb-6 sm:mb-10 shrink-0">
                             <div>
-                                <h3 className="text-2xl font-black text-white">Daily Summary</h3>
-                                <p className="text-white/30 text-xs font-bold uppercase tracking-widest mt-1">
+                                <h3 className="text-xl font-black text-white">Daily Summary</h3>
+                                <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-1">
                                     {new Date(viewingDetails.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
                                 </p>
                             </div>
                             <button
                                 onClick={() => setViewingDetails(null)}
-                                className="relative z-10 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+                                className="relative z-10 w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all active:scale-90"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="space-y-6">
-                            {/* Mood Section */}
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <div className={`w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center ${moodIcons[viewingDetails.mood] ? `text-${moodIcons[viewingDetails.mood].color}-400` : 'text-white/20'}`}>
+                        <div className="space-y-5 sm:space-y-8">
+                            {/* Mood Section - Ultra Compact */}
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 sm:py-5">
+                                <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl bg-white/5 flex items-center justify-center ${moodIcons[viewingDetails.mood] ? `text-${moodIcons[viewingDetails.mood].color}-400` : 'text-white/20'}`}>
                                     {(() => {
                                         const MoodIcon = moodIcons[viewingDetails.mood]?.icon || Meh;
-                                        return <MoodIcon className="w-6 h-6" />;
+                                        return <MoodIcon className="w-5 h-5 sm:w-7 sm:h-7" />;
                                     })()}
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Feeling</p>
-                                    <p className="text-white font-bold capitalize">{viewingDetails.mood || 'Not recorded'}</p>
+                                    <p className="text-[9px] sm:text-[10px] font-black text-white/20 uppercase tracking-[0.2em] leading-none mb-1 sm:mb-2">Feeling</p>
+                                    <p className="text-white text-xs sm:text-sm font-bold capitalize">{viewingDetails.mood || 'Not recorded'}</p>
                                 </div>
                             </div>
 
-                            {/* Tasks Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {/* Tasks Grid - Forced 2 columns for space efficiency */}
+                            <div className="grid grid-cols-2 gap-2 sm:gap-4">
                                 {[
-                                    { f: 'quant', l: 'Quantitative Ability', icon: Brain, color: 'purple' },
-                                    { f: 'lrdi', l: 'LR & Data Interpretation', icon: Zap, color: 'blue' },
-                                    { f: 'varc', l: 'Verbal Ability & RC', icon: Activity, color: 'emerald' },
-                                    { f: 'softSkill', l: 'Soft Skills Training', icon: Heart, color: 'pink' },
-                                    { f: 'exercise', l: 'Physical Exercise', icon: Dumbbell, color: 'orange' },
-                                    { f: 'gaming', l: 'Gaming & Recreation', icon: Gamepad2, color: 'cyan' },
+                                    { f: 'quant', l: 'Quant', icon: Brain, color: 'purple' },
+                                    { f: 'lrdi', l: 'LRDI', icon: Zap, color: 'blue' },
+                                    { f: 'varc', l: 'VARC', icon: Activity, color: 'emerald' },
+                                    { f: 'softSkill', l: 'Soft Skills', icon: Heart, color: 'pink' },
+                                    { f: 'exercise', l: 'Exercise', icon: Dumbbell, color: 'orange' },
+                                    { f: 'gaming', l: 'Gaming', icon: Gamepad2, color: 'cyan' },
                                 ].map(({ f, l, icon: Icon, color }) => (
                                     <div
                                         key={f}
-                                        className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${viewingDetails[f]
+                                        className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${viewingDetails[f]
                                             ? `bg-${color}-500/10 border-${color}-500/20 text-${color}-400`
                                             : 'bg-white/5 border-white/5 text-white/20'
                                             }`}
                                     >
-                                        <Icon className="w-4 h-4 shrink-0" />
-                                        <span className="text-[10px] font-black uppercase tracking-tight leading-none">{l}</span>
-                                        {viewingDetails[f] && <CheckCircle2 className="w-3.5 h-3.5 ml-auto" />}
+                                        <Icon className="w-3.5 h-3.5 shrink-0" />
+                                        <span className="text-[9px] font-black uppercase tracking-tight leading-none truncate">{l}</span>
+                                        {viewingDetails[f] && <CheckCircle2 className="w-3 h-3 ml-auto shrink-0" />}
                                     </div>
                                 ))}
                             </div>
 
-                            <div className="pt-4">
-                                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="pt-2">
+                                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-linear-to-r from-purple-500 to-pink-500 transition-all duration-1000"
                                         style={{ width: `${(completionCount(viewingDetails) / 6) * 100}%` }}
                                     ></div>
                                 </div>
-                                <p className="text-center text-[10px] font-black text-white/20 uppercase tracking-widest mt-3">
-                                    Daily Goal: {completionCount(viewingDetails)} / 6 COMPLETED
+                                <p className="text-center text-[9px] font-black text-white/20 uppercase tracking-widest mt-2">
+                                    {completionCount(viewingDetails)} / 6 COMPLETED
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             <ConfirmDialog

@@ -321,3 +321,10 @@ body {
 .menu-item svg {
   @apply w-4 h-4 shrink-0;
 }
+
+.no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none !important;
+  -webkit-overflow-scrolling: none !important;
+}
